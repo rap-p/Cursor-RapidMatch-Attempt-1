@@ -87,6 +87,60 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
       
+      // Try to get processed profile data from background
+      const processedProfile = await sendMessage('getProfileData');
+      if (processedProfile && processedProfile.basic) {
+        // Display structured profile data
+        resultDiv.innerHTML = `
+          <div class="match-result">
+            <h3>📋 Profile Data Extracted</h3>
+            <div class="profile-section">
+              <h4>👤 Basic Info</h4>
+              <p><strong>Name:</strong> ${processedProfile.basic.name}</p>
+              <p><strong>Headline:</strong> ${processedProfile.basic.headline}</p>
+              <p><strong>Location:</strong> ${processedProfile.basic.location}</p>
+              <p><strong>Profile URL:</strong> <a href="${processedProfile.basic.publicProfileUrl}" target="_blank">${processedProfile.basic.publicProfileUrl}</a></p>
+            </div>
+            
+            ${processedProfile.experience.length > 0 ? `
+            <div class="profile-section">
+              <h4>💼 Experience (${processedProfile.experience.length} positions)</h4>
+              ${processedProfile.experience.slice(0, 3).map(exp => `
+                <div class="experience-item">
+                  <p><strong>${exp.title}</strong> at ${exp.company}</p>
+                  <p><em>${exp.from} - ${exp.to || 'Present'}</em></p>
+                </div>
+              `).join('')}
+            </div>
+            ` : ''}
+            
+            ${processedProfile.education.length > 0 ? `
+            <div class="profile-section">
+              <h4>🎓 Education (${processedProfile.education.length} entries)</h4>
+              ${processedProfile.education.map(edu => `
+                <div class="education-item">
+                  <p><strong>${edu.degree}</strong> at ${edu.school}</p>
+                  <p><em>${edu.start} - ${edu.end || 'Present'}</em></p>
+                </div>
+              `).join('')}
+            </div>
+            ` : ''}
+            
+            ${processedProfile.skills.length > 0 ? `
+            <div class="profile-section">
+              <h4>🛠️ Skills (${processedProfile.skills.length} skills)</h4>
+              <p>${processedProfile.skills.slice(0, 10).join(', ')}${processedProfile.skills.length > 10 ? '...' : ''}</p>
+            </div>
+            ` : ''}
+          </div>
+          <details>
+            <summary>Raw Data</summary>
+            <pre>${JSON.stringify(processedProfile, null, 2)}</pre>
+          </details>
+        `;
+        return;
+      }
+      
       const activeRoleId = await sendMessage('getActiveRole');
       if (!activeRoleId) {
         resultDiv.innerHTML = '<p>❌ No active role selected. Please create and select a role first.</p>';
