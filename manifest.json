@@ -5,18 +5,38 @@
   "description": "RapidMatch - AI-powered LinkedIn profile matching for recruiters",
   "permissions": [
     "storage",
-    "activeTab"
+    "activeTab",
+    "scripting"
   ],
+  "host_permissions": [
+    "*://*.linkedin.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
   "content_scripts": [
     {
       "matches": ["*://*.linkedin.com/*"],
       "js": ["content.js"]
     }
   ],
-                "web_accessible_resources": [
-                {
-                  "resources": ["panel.html", "panel.js", "style.css", "pageHook.js"],
-                  "matches": ["<all_urls>"]
-                }
-              ]
-} 
+  "action": {
+    "default_popup": "panel.html"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "panel.html",
+        "panel.js",
+        "style.css",
+        "pageHook.js"
+      ],
+      "matches": [
+        "*://*.linkedin.com/*"
+      ]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}
