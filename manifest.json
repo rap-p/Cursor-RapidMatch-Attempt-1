@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "RapidMatch Cursor",
+  "name": "Cursor Refactor v1 - RapidMatch",
   "version": "1.0",
   "description": "RapidMatch - AI-powered LinkedIn profile matching for recruiters",
   "permissions": [

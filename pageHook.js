@@ -20,8 +20,15 @@ function stripJsonPrefix(text) {
 
 // Helper to process any JSON data we successfully parse
 function processJsonData(jsonData, url) {
-  // We only care about talent API responses.
-  if (!url.includes('/talent/api/')) {
+  console.log('RapidMatch: Processing JSON data from URL:', url);
+  
+  // We care about both talent API responses and regular LinkedIn profile data
+  const isTalentApi = url.includes('/talent/api/');
+  const isVoyagerApi = url.includes('/voyager/api/');
+  const isRelevantUrl = url.includes('profile') || url.includes('identity');
+  
+  if (!isTalentApi && !isVoyagerApi && !isRelevantUrl) {
+    console.log('RapidMatch: Skipping non-relevant API URL');
     return;
   }
 
@@ -29,7 +36,17 @@ function processJsonData(jsonData, url) {
   const dataCandidates = [jsonData, jsonData?.data, ...(Array.isArray(jsonData?.elements) ? jsonData.elements : [])];
   let isProfileData = false;
   for (const candidate of dataCandidates) {
-    if (candidate && (candidate.firstName || candidate.unobfuscatedFirstName || candidate.educations || candidate.groupedWorkExperience || candidate.profileSkills)) {
+    if (candidate && (
+      candidate.firstName || 
+      candidate.unobfuscatedFirstName || 
+      candidate.educations || 
+      candidate.groupedWorkExperience || 
+      candidate.profileSkills ||
+      candidate.publicIdentifier ||
+      candidate.localizedHeadline ||
+      candidate.localizedFirstName ||
+      candidate.localizedLastName
+    )) {
       isProfileData = true;
       break;
     }
@@ -37,8 +54,12 @@ function processJsonData(jsonData, url) {
 
   if (isProfileData) {
     console.log(`RapidMatch: Found profile data from ${url}. Dispatching event.`);
+    console.log('RapidMatch: Profile data structure:', Object.keys(jsonData || {}));
     // Dispatch an event with the captured data. The content script will listen for this.
     window.dispatchEvent(new CustomEvent('rapidMatchProfileDataCaptured', { detail: jsonData }));
+  } else {
+    console.log('RapidMatch: No profile data found in response');
+    console.log('RapidMatch: Available data keys:', Object.keys(jsonData || {}));
   }
 }
 

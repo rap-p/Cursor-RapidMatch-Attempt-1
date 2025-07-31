@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
+  console.log('RapidMatch: Panel.js loaded and DOM ready');
+  
   // --- DOM Element Selectors ---
   const tabButtons = document.querySelectorAll('.rapidmatch-tab');
   const tabPanels = document.querySelectorAll('.rapidmatch-tab-panel');
@@ -10,6 +12,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const roleForm = document.getElementById('role-form');
   const rolesListDiv = document.getElementById('roles-list');
   const roleDetailsDiv = document.getElementById('role-details');
+  
+  console.log('RapidMatch: Found elements:', {
+    tabButtons: tabButtons.length,
+    tabPanels: tabPanels.length,
+    scanBtn: !!scanBtn,
+    resultDiv: !!resultDiv,
+    addRoleBtn: !!addRoleBtn
+  });
 
   let editingRoleId = null;
   
@@ -19,8 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --- Tab Switching Logic ---
+  console.log('RapidMatch: Setting up tab switching for', tabButtons.length, 'buttons');
   tabButtons.forEach(btn => {
     btn.addEventListener('click', () => {
+      console.log('RapidMatch: Tab clicked:', btn.getAttribute('data-tab'));
       tabButtons.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       const tab = btn.getAttribute('data-tab');
@@ -34,20 +46,46 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // --- Scan Logic ---
+  console.log('RapidMatch: Setting up scan button listener');
   scanBtn.addEventListener('click', async () => {
+    console.log('RapidMatch: Scan button clicked');
     resultDiv.innerHTML = '<p>🔍 Scanning profile...</p>';
     try {
       const activeTab = await chrome.tabs.query({ active: true, currentWindow: true });
+      console.log('RapidMatch: Active tab:', activeTab[0]);
+      
       if (!activeTab[0]) {
         throw new Error("Could not find active tab.");
       }
       
+      console.log('RapidMatch: Sending extractProfile message to tab:', activeTab[0].id);
       const profileResult = await chrome.tabs.sendMessage(activeTab[0].id, { action: 'extractProfile' });
+      console.log('RapidMatch: Profile result:', profileResult);
+      
       if (!profileResult || !profileResult.data) {
         throw new Error(profileResult?.debug?.error || "Failed to extract profile data. The content script may not be running or the page may not be supported.");
       }
       
       const profile = profileResult.data;
+      
+      // Check if this is fallback data
+      if (profileResult.debug?.fallback) {
+        resultDiv.innerHTML = `
+          <div class="match-result">
+            <h3>⚠️ Debug Mode</h3>
+            <p><strong>Page:</strong> ${profile.pageTitle}</p>
+            <p><strong>URL:</strong> ${profile.pageUrl}</p>
+            <p><strong>Is LinkedIn:</strong> ${profile.isLinkedIn ? 'Yes' : 'No'}</p>
+            <p><strong>Timestamp:</strong> ${new Date(profile.timestamp).toLocaleString()}</p>
+            <p><em>This is fallback data. The extension is working but hasn't captured LinkedIn profile data yet.</em></p>
+          </div>
+          <details>
+            <summary>Debug Info</summary>
+            <pre>${JSON.stringify(profileResult, null, 2)}</pre>
+          </details>
+        `;
+        return;
+      }
       
       const activeRoleId = await sendMessage('getActiveRole');
       if (!activeRoleId) {
@@ -198,4 +236,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initial Render
   renderRolesList();
+  
+  // Test: Add a simple click handler to test if DOM is working
+  console.log('RapidMatch: Adding test click handler');
+  document.body.addEventListener('click', (e) => {
+    console.log('RapidMatch: Body clicked:', e.target.tagName, e.target.id);
+  });
 }); 
