@@ -9,19 +9,26 @@ RapidMatch is a Chrome extension designed to extract comprehensive LinkedIn prof
 
 ### ✅ What's Working
 1.  **Modern Extension Architecture**
-    -   **`manifest.json`**: Configured for Manifest V3 with a background service worker, action popup, and appropriate permissions. (Note: Manual application of manifest changes is pending).
-    -   **`background.js`**: A dedicated service worker now handles all state management, including `chrome.storage` API calls for roles.
-    -   **`content.js`**: Now a lightweight script whose sole responsibilities are injecting the `pageHook.js` and acting as a message bridge to the background script.
+    -   **`manifest.json`**: Configured for Manifest V3 with a background service worker, action popup, and appropriate permissions. Extension name updated to "Cursor Refactor v1 - RapidMatch" for easy identification.
+    -   **`background.js`**: A dedicated service worker handles all state management, including `chrome.storage` API calls for roles.
+    -   **`content.js`**: Lightweight script that injects `pageHook.js` and acts as a message bridge to the background script.
     -   **Separation of Concerns**: Clear architectural separation between the UI (`panel`), background logic (`background.js`), page-level interception (`pageHook.js`), and content script bridging (`content.js`).
 
 2.  **Network Interception**
     -   `pageHook.js` successfully intercepts `fetch` and `XMLHttpRequest` calls on LinkedIn pages.
     -   It correctly rewrites URLs for `/talent/api/` endpoints to request more comprehensive data.
+    -   **Enhanced API Detection**: Now works on both LinkedIn Recruiter (`/talent/api/`) and regular LinkedIn pages (`/voyager/api/`, profile endpoints).
     -   Intercepted profile data is dispatched via a custom event (`rapidMatchProfileDataCaptured`) to the content script.
 
 3.  **Communication**
     -   A robust messaging pipeline is in place: `pageHook.js` -> `content.js` -> `background.js` -> `panel.js`.
     -   Communication uses the standard and secure `chrome.runtime.sendMessage` and `chrome.tabs.sendMessage` APIs.
+
+4.  **UI and User Experience**
+    -   **Fixed Popup Sizing**: Extension popup now has correct dimensions (400x550px) and displays content properly.
+    -   **Functional UI**: All buttons and tabs are working with proper event listeners.
+    -   **Debug Mode**: Comprehensive console logging and fallback data mechanism for troubleshooting.
+    -   **Cross-Platform Compatibility**: Works on both LinkedIn Recruiter and regular LinkedIn profile pages.
 
 ### ❌ What's Not Working / Needs Improvement
 1.  **Data Processing Logic**:
@@ -32,8 +39,9 @@ RapidMatch is a Chrome extension designed to extract comprehensive LinkedIn prof
     -   The panel UI (`panel.js`) has been refactored to use the new communication architecture, but its matching logic is rudimentary and operating on placeholder assumptions about the data structure. It will not work correctly until the background script provides properly structured data.
     -   The UI styling is basic and does not use a modern framework like React/Shadcn/Tailwind as recommended by the project rules.
 
-3.  **Manifest Application**:
-    -   The automated application of the recommended changes to `manifest.json` repeatedly failed. These changes need to be applied manually to enable the new architecture.
+3.  **LinkedIn Profile Data Capture**:
+    -   While the extension now works on both LinkedIn Recruiter and regular LinkedIn pages, the profile data capture is still in development.
+    -   The fallback debug mode provides basic page information but full profile extraction needs to be implemented.
 
 ## Technical Architecture (Post-Refactoring)
 
@@ -92,15 +100,22 @@ cursor v1/
 8.  The panel displays the results.
 
 ## Next Steps for Future Development
-1.  **Manual Manifest Update**: **Immediately** apply the recommended changes to `manifest.json` to enable the new architecture.
-2.  **Implement Data Parsing in `background.js`**: This is the most critical next step. Create robust functions in the service worker to parse the raw, nested JSON from the LinkedIn API into a clean, flat profile object containing `name`, `headline`, `experience`, `education`, and `skills`.
-3.  **Refine Panel UI Logic**: Once `background.js` provides structured data, update `panel.js` to consume it and perform accurate matching and scoring.
-4.  **Modernize the UI**: Rewrite the panel using React, Shadcn UI, and Tailwind CSS to create a professional and maintainable user interface.
-5.  **Improve Error Handling**: Add more robust error handling throughout the message-passing pipeline.
+1.  **Implement Data Parsing in `background.js`**: This is the most critical next step. Create robust functions in the service worker to parse the raw, nested JSON from the LinkedIn API into a clean, flat profile object containing `name`, `headline`, `experience`, `education`, and `skills`.
+2.  **Refine Panel UI Logic**: Once `background.js` provides structured data, update `panel.js` to consume it and perform accurate matching and scoring.
+3.  **Modernize the UI**: Rewrite the panel using React, Shadcn UI, and Tailwind CSS to create a professional and maintainable user interface.
+4.  **Improve Error Handling**: Add more robust error handling throughout the message-passing pipeline.
+5.  **Enhanced Profile Data Capture**: Implement comprehensive profile data extraction for both LinkedIn Recruiter and regular LinkedIn pages.
 
 ## Installation
 1.  Clone the repository to your local machine.
 2.  Open Chrome and navigate to `chrome://extensions/`.
 3.  Enable "Developer mode" in the top right corner.
 4.  Click "Load unpacked" and select the directory where the extension is located.
-5.  **Manually update `manifest.json` as per the recommendations in this README.** 
+5.  The extension will appear as "Cursor Refactor v1 - RapidMatch" in your extensions list.
+
+## Usage
+1.  Navigate to any LinkedIn page (Recruiter or regular LinkedIn profiles).
+2.  Click the extension icon in your browser toolbar.
+3.  The popup will show the "Scan" and "Roles" tabs.
+4.  Click "⚡ Scan Now" to capture profile data (currently shows debug information).
+5.  Use the "Roles" tab to create and manage job roles for matching. 
