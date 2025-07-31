@@ -1,0 +1,45 @@
+<div id="rapidmatch-tabs">
+  <button class="rapidmatch-tab active" data-tab="scan">Scan</button>
+  <button class="rapidmatch-tab" data-tab="roles">Roles</button>
+</div>
+<div id="rapidmatch-tab-content">
+  <div class="rapidmatch-tab-panel" data-tab="scan" style="display:block;">
+    <div id="rapidmatch-container">
+      <div id="rapidmatch-header">
+        <span id="rapidmatch-title">RapidMatch</span>
+        <button id="scan-now">⚡ Scan Now</button>
+      </div>
+      <div id="scan-result">
+        <p>Scan a profile to see results here.</p>
+      </div>
+    </div>
+  </div>
+  <div class="rapidmatch-tab-panel" data-tab="roles" style="display:none;">
+    <div id="roles-header">
+      <span id="roles-title">Roles</span>
+      <button id="add-role">＋ Add Role</button>
+    </div>
+    <div id="roles-list">
+      <p>No roles yet. Click 'Add Role' to create one.</p>
+    </div>
+    <div id="role-details" style="display:none;"></div>
+  </div>
+</div>
+<!-- Role Modal -->
+<div id="role-modal" style="display:none;">
+  <div id="role-modal-content">
+    <h2 id="role-modal-title">Add Role</h2>
+    <form id="role-form">
+      <label for="role-title">Role Title</label>
+      <input type="text" id="role-title" name="role-title" required />
+      <label for="role-jd">Job Description</label>
+      <textarea id="role-jd" name="role-jd" rows="3" required></textarea>
+      <label for="role-notes">Intake Notes</label>
+      <textarea id="role-notes" name="role-notes" rows="2"></textarea>
+      <div id="role-modal-actions">
+        <button type="submit" id="save-role">Save</button>
+        <button type="button" id="cancel-role">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div> 

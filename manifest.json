@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "RapidMatch Cursor",
+  "version": "1.0",
+  "description": "RapidMatch - AI-powered LinkedIn profile matching for recruiters",
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["*://*.linkedin.com/*"],
+      "js": ["content.js"]
+    }
+  ],
+                "web_accessible_resources": [
+                {
+                  "resources": ["panel.html", "panel.js", "style.css", "pageHook.js"],
+                  "matches": ["<all_urls>"]
+                }
+              ]
+} 

@@ -1,0 +1,233 @@
+#rapidmatch-container {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f7f8fa;
+  color: #222;
+  width: 100%;
+  height: 100vh;
+  box-shadow: -2px 0 8px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+}
+#rapidmatch-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 12px 20px;
+  border-bottom: 1px solid #e0e0e0;
+  background: #fff;
+}
+#rapidmatch-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+#scan-now {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+#scan-now:hover {
+  background: #0056b3;
+}
+#scan-result {
+  flex: 1;
+  padding: 24px 20px;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  max-height: 65vh;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+.match-label {
+  display: inline-block;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 16px;
+  margin-top: 12px;
+  font-size: 1.1rem;
+}
+.match-label.near-perfect {
+  background: #2ecc40;
+  color: #fff;
+}
+.match-label.great {
+  background: #0074d9;
+  color: #fff;
+}
+.match-label.weak {
+  background: #ff851b;
+  color: #fff;
+}
+.match-label.not-fit {
+  background: #aaa;
+  color: #fff;
+}
+#rapidmatch-tabs {
+  display: flex;
+  border-bottom: 1px solid #e0e0e0;
+  background: #f7f8fa;
+}
+.rapidmatch-tab {
+  flex: 1;
+  padding: 12px 0;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #555;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.rapidmatch-tab.active {
+  color: #007bff;
+  border-bottom: 2px solid #007bff;
+  background: #fff;
+}
+#roles-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 12px 20px;
+  border-bottom: 1px solid #e0e0e0;
+  background: #fff;
+}
+#roles-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+#add-role {
+  background: #2ecc40;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 14px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+#add-role:hover {
+  background: #27ae38;
+}
+#roles-list {
+  padding: 20px;
+}
+#role-details {
+  padding: 20px;
+  background: #f9f9fb;
+  border-top: 1px solid #eee;
+}
+#role-modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.18);
+  z-index: 1000001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#role-modal-content {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+  padding: 28px 28px 18px 28px;
+  min-width: 320px;
+  max-width: 95vw;
+}
+#role-modal-content h2 {
+  margin-top: 0;
+  font-size: 1.2rem;
+  margin-bottom: 18px;
+}
+#role-form label {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 4px;
+  font-size: 0.98rem;
+  color: #333;
+}
+#role-form input[type="text"],
+#role-form textarea {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  background: #f7f8fa;
+  resize: vertical;
+}
+#role-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+#save-role {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 18px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+#save-role:hover {
+  background: #0056b3;
+}
+#cancel-role {
+  background: #aaa;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 18px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+#cancel-role:hover {
+  background: #888;
+}
+.role-list-item {
+  border: 1px solid #e0e0e0;
+  border-radius: 7px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+}
+.role-list-item.active {
+  border: 2px solid #007bff;
+  background: #f0f6ff;
+}
+.set-active-role {
+  align-self: flex-end;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 14px;
+  font-size: 0.98rem;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: background 0.2s;
+}
+.set-active-role:hover {
+  background: #0056b3;
+}
+.role-list-item.active .set-active-role {
+  background: #2ecc40;
+  cursor: default;
+}
+.role-list-item.active .set-active-role:hover {
+  background: #2ecc40;
+} 
